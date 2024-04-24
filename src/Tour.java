@@ -57,6 +57,25 @@ public class Tour {
             cur=cur.next;
         }
     }
+    public void insertNearest(Point p)
+    {
+        double smallest = first.p.distanceTo(p);
+        Node nearestNode = first;
+        double distance;
+        Node cur = first.next;
+        while (cur!=first)
+        {
+            distance = cur.p.distanceTo(p);
+            if(smallest>distance)
+            {
+                nearestNode = cur;
+                smallest = distance;
+            }
+            cur = cur.next;
+        }
+        Node newNode = new Node(p,nearestNode.next);
+        nearestNode.next = newNode;
+    }
 
     @Override
     public String toString() {
@@ -70,7 +89,6 @@ public class Tour {
         }
         return s.toString();
     }
-
     public static void main(String args[])
     {
         Point p1 = new Point(100.0,100.0);
@@ -82,6 +100,9 @@ public class Tour {
         StdOut.println(tour.toString());
         StdDraw.setXscale(0,600);
         StdDraw.setYscale(0,600);
+        tour.insertNearest(new Point(350,350));
+        StdOut.println("size = "+tour.size()+" length = "+tour.length());
         tour.draw();
+
     }
 }
