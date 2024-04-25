@@ -77,6 +77,36 @@ public class Tour {
         nearestNode.next = newNode;
     }
 
+    public void smallestInsertion(Point p)
+    {
+        Node newNode =new Node(p);
+        Node cur = first.next;
+        Node next;
+        Node insertion=first;
+        first.next = newNode;
+        newNode.next=cur;
+        double smallest = this.length();
+        double len;
+        first.next=cur;
+        while (cur!=first)
+        {
+            next=cur.next;
+            cur.next=newNode;
+            newNode.next=next;
+            len = this.length();
+            if(len<smallest)
+            {
+                insertion=cur;
+                smallest=len;
+            }
+            cur.next=next;
+            cur = cur.next;
+        }
+        next = insertion.next;
+        insertion.next=newNode;
+        newNode.next=next;
+    }
+
     @Override
     public String toString() {
         StringBuilder s = new StringBuilder();
@@ -101,7 +131,14 @@ public class Tour {
         StdDraw.setXscale(0,600);
         StdDraw.setYscale(0,600);
         tour.insertNearest(new Point(350,350));
+        tour.insertNearest(new Point(50,50));
+        tour.insertNearest(new Point(450,400));
         StdOut.println("size = "+tour.size()+" length = "+tour.length());
+        StdOut.println(tour.toString());
+        tour.smallestInsertion(new Point(100,250));
+        tour.smallestInsertion(new Point(450,550));
+        StdOut.println("size = "+tour.size()+" length = "+tour.length());
+        StdOut.println(tour.toString());
         tour.draw();
 
     }
