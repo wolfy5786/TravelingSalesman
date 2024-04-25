@@ -16,13 +16,17 @@ public class Tour {
     }
     Node first;
 
-    public Tour(Point p1, Point p2, Point p3, Point p4) {
+    public Tour(Point p1, Point p2, Point p3, Point p4) { //debug code
         Node n1 = new Node(p1);
         Node n2 = new Node(p2,n1);
         Node n3 = new Node(p3,n2);
         Node n4 = new Node(p4,n3);
         n1.next=n4;
         first = n1;
+    }
+    public Tour()
+    {
+        first=null; //empty tour
     }
     int size()
     {
@@ -49,17 +53,30 @@ public class Tour {
     }
     void draw()
     {
-        Node cur = first.next;
+        Node cur = first.next; //current node
         first.p.drawTo(first.next.p);
-        while (cur!=first)
+        while (cur!=first) //completes the circle
         {
             cur.p.drawTo(cur.next.p);
             cur=cur.next;
         }
     }
+    //inserts a node to the circular linked list to the nearest node
     public void insertNearest(Point p)
     {
-        double smallest = first.p.distanceTo(p);
+        if(first==null) //if adding first node
+        {
+            Node new_node = new Node(p);
+            first = new_node;
+            return;
+        }
+        if(first.next==null) //adding second node
+        {
+            first.next=new Node(p);
+            first.next.next=first; //create a circular linked list
+            return;
+        }
+        double smallest = first.p.distanceTo(p); //nearest distance
         Node nearestNode = first;
         double distance;
         Node cur = first.next;
@@ -76,16 +93,28 @@ public class Tour {
         Node newNode = new Node(p,nearestNode.next);
         nearestNode.next = newNode;
     }
-
-    public void smallestInsertion(Point p)
+    //inserts a node into the linked such that the total length is smalest
+    public void insertSmallest(Point p)
     {
-        Node newNode =new Node(p);
-        Node cur = first.next;
+        if(first==null) //adding first node
+        {
+            Node new_node = new Node(p);
+            first = new_node;
+            return;
+        }
+        if(first.next==null) //adding second node
+        {
+            first.next=new Node(p);
+            first.next.next=first; //make it circular
+            return;
+        }
+        Node newNode =new Node(p); //node to be inserted
+        Node cur = first.next; //point to curent node
         Node next;
         Node insertion=first;
         first.next = newNode;
         newNode.next=cur;
-        double smallest = this.length();
+        double smallest = this.length(); //record for smallest length
         double len;
         first.next=cur;
         while (cur!=first)
@@ -106,7 +135,7 @@ public class Tour {
         insertion.next=newNode;
         newNode.next=next;
     }
-
+    //returns a string of all points in tour
     @Override
     public String toString() {
         StringBuilder s = new StringBuilder();
@@ -121,7 +150,7 @@ public class Tour {
     }
     public static void main(String args[])
     {
-        Point p1 = new Point(100.0,100.0);
+        Point p1 = new Point(100.0,100.0); //debug code
         Point p2 = new Point(500.0,100.0);
         Point p3 = new Point(500.0,500.0);
         Point p4 = new Point(100.0,500.0);
@@ -135,8 +164,8 @@ public class Tour {
         tour.insertNearest(new Point(450,400));
         StdOut.println("size = "+tour.size()+" length = "+tour.length());
         StdOut.println(tour.toString());
-        tour.smallestInsertion(new Point(100,250));
-        tour.smallestInsertion(new Point(450,550));
+        tour.insertSmallest(new Point(100,250));
+        tour.insertSmallest(new Point(450,550));
         StdOut.println("size = "+tour.size()+" length = "+tour.length());
         StdOut.println(tour.toString());
         tour.draw();
